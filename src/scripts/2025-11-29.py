@@ -1,19 +1,24 @@
+import asyncio
+
 from toy_19_pms.database import get_session
-from toy_19_pms.database_models import Post, User
+from toy_19_pms.database_models import Post, User, init_db
 
 
-def main():
-    with get_session() as session:
+async def main():
+    # Initialize database (creates tables if they don't exist)
+    await init_db()
+
+    async with get_session() as session:
         user = User(name="John Doe", email="john.doe@example.com")
-        session.add(user)
-        session.commit()  # Commit to get the user.id
+        # session.add(user)
+        # await session.commit()  # Commit to get the user.id
 
         post = Post(title="My First Post", content="This is my first post", user_id=user.id)
         session.add(post)
-        session.commit()
+        await session.commit()
         print(user)
         print(post)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

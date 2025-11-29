@@ -1,23 +1,30 @@
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 
-from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-# Database configuration
-DATABASE_URL = "sqlite:///toy_19_pms.db"
+# Database config
+DATABASE_URL = "sqlite+aiosqlite:///toy_19_pms.db"  # aiosqlite for async SQLite
 
-engine = create_engine(
+# Create async engine
+async_engine = create_async_engine(
     DATABASE_URL,
     echo=True,
 )
-SessionLocal = sessionmaker(bind=engine)
+
+# Create async session factory
+AsyncSessionLocal = sessionmaker(
+    bind=async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
 
 
-@contextmanager
-def get_session():
-    """Dependency to get database session"""
-    session = SessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
+@asynccontextmanager
+async def get_session():
+    """Async dependency to get database session"""
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()

@@ -1,8 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import declarative_base, relationship
 
-from toy_19_pms.database import engine
-
 # Create Base first, before defining models
 Base = declarative_base()
 
@@ -29,5 +27,9 @@ class Post(Base):
     author = relationship("User", back_populates="posts")
 
 
-# Create tables after models are defined
-Base.metadata.create_all(engine)
+async def init_db():
+    """Initialize the database by creating all tables (async)."""
+    from toy_19_pms.database import async_engine
+
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
