@@ -1,6 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import declarative_base, relationship
 
+from toy_19_pms.database import get_session as get_db_session  # noqa: F401 # for more efficient import
+
 # Create Base first, before defining models
 Base = declarative_base()
 
@@ -25,11 +27,3 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     author = relationship("User", back_populates="posts")
-
-
-async def init_db():
-    """Initialize the database by creating all tables (async)."""
-    from toy_19_pms.database import async_engine
-
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
