@@ -1,17 +1,16 @@
 from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Database config
-DATABASE_URL: str = "sqlite+aiosqlite:///toy_19_pms.db"  # aiosqlite for async SQLite
+DATABASE_URL: str = "sqlite+aiosqlite:///dev.db"  # aiosqlite for async SQLite
 
 # Create async engine - following SQLModel pattern
 engine: AsyncEngine = create_async_engine(
     DATABASE_URL,
-    echo=True,
+    # echo=True,
 )
 
 
@@ -24,12 +23,12 @@ async def create_db_and_tables() -> None:
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
-@asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """Get async database session.
 
-    Type-safe async context manager for database sessions.
+    Type-safe async generator for database sessions.
     Automatically handles session lifecycle.
+    Used as a FastAPI dependency.
     """
     async with AsyncSession(engine) as session:
         yield session

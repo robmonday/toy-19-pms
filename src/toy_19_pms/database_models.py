@@ -2,9 +2,7 @@ from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from toy_19_pms.database import get_session as get_db_session  # noqa: F401 # for more efficient import
-
-# https://www.youtube.com/watch?v=GONyd0CUrPc
+# https://www.youtube.com/watch?v=GONyd0CUrP
 
 
 # Define models using SQLModel (combines Pydantic + SQLAlchemy)

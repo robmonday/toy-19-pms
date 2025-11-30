@@ -3,15 +3,15 @@ import asyncio
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
-from toy_19_pms.database import create_db_and_tables
-from toy_19_pms.database_models import Post, get_db_session
+from toy_19_pms.database import create_db_and_tables, get_session
+from toy_19_pms.database_models import Post
 
 
 async def main():
     await create_db_and_tables()  # run at app startup
 
     # Get database session for query
-    async with get_db_session() as session:
+    async with get_session() as session:
         # Query posts with eager loading of author relationship
         # selectinload prevents N+1 queries in async context
         stmt = select(Post).where(Post.title == "My First Post").options(selectinload(Post.author))
