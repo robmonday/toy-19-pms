@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from toy_19_pms.sqlmodel.database import get_session as get_db_session  # noqa: F401 # for more efficient import
+from toy_19_pms.database import get_session as get_db_session  # noqa: F401 # for more efficient import
 
 # https://www.youtube.com/watch?v=GONyd0CUrPc
 

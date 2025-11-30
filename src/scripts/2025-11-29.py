@@ -3,14 +3,14 @@ import asyncio
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
-from toy_19_pms.sqlmodel.database import create_db_and_tables
-from toy_19_pms.sqlmodel.database_models import Post, get_db_session
+from toy_19_pms.database import create_db_and_tables
+from toy_19_pms.database_models import Post, get_db_session
 
 
 async def main():
-    # Create tables if they don't exist - SQLModel best practice
-    await create_db_and_tables()
+    await create_db_and_tables()  # run at app startup
 
+    # Get database session for query
     async with get_db_session() as session:
         # Query posts with eager loading of author relationship
         # selectinload prevents N+1 queries in async context
